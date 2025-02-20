@@ -38,11 +38,11 @@ async function connectToWhatsApp() {
 
         if (text) {
             console.log(`📩 Pesan dari ${sender}: ${text}`);
-/*
+
             // Kirim sticker pertama kali
             const sticker = fs.readFileSync('sticker.webp'); // Pastikan sudah ada file sticker.webp
             await sock.sendMessage(sender, { sticker: sticker });
-*/
+
             // Kirim reaction emoji ke pesan pengguna
             await sock.sendMessage(sender, {
                 react: {
@@ -50,8 +50,11 @@ async function connectToWhatsApp() {
                     key: msg.key
                 }
             });
-
+            // Tampilkan status "sedang merekam..."
+            await sock.sendPresenceUpdate('recording', sender);
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Tunggu 2 detik
             // Bot akan mengetik 3 kali sebelum mengirim balasan
+            
             for (let i = 0; i < 3; i++) {
                 await sock.sendPresenceUpdate('composing', sender);
                 await new Promise(resolve => setTimeout(resolve, 1000)); // Tunggu 1.5 detik
